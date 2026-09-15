@@ -167,7 +167,7 @@ export function Skills({ darkMode }: SkillsProps) {
   );
 
   return (
-    <section id="skills" className="py-16 md:py-24 relative overflow-hidden">
+    <section id="skills" className="py-16 md:py-24 relative overflow-hidden scroll-mt-20 md:scroll-mt-24">
       {/* Clean Section Header (No boxes, no tabs) */}
       <div className="max-w-6xl mx-auto px-6 md:px-12 mb-10 md:mb-12">
         <div className="flex items-center gap-2 mb-2">
@@ -191,10 +191,6 @@ export function Skills({ darkMode }: SkillsProps) {
 
       {/* CONTINUOUS HORIZONTAL CRAWL OF ALL ORIGINAL CARDS WITHOUT ANY OUTER BOX */}
       <div className="relative w-full overflow-hidden space-y-4 sm:space-y-6">
-        {/* Soft edge gradient fades for smooth infinite borderless entry and exit */}
-        <div className="absolute left-0 inset-y-0 w-12 sm:w-28 bg-gradient-to-r from-[#FDFBF7] dark:from-[#121214] to-transparent z-20 pointer-events-none" />
-        <div className="absolute right-0 inset-y-0 w-12 sm:w-28 bg-gradient-to-l from-[#FDFBF7] dark:from-[#121214] to-transparent z-20 pointer-events-none" />
-
         {/* ROW 1: Continuous Crawl (Moving Left) */}
         <div
           className="flex overflow-hidden py-2"

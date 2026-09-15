@@ -1,0 +1,80 @@
+{
+  "entities": {
+    "Admin": {
+      "title": "Admin",
+      "description": "Root admin singleton for administrative access and single-session tracking",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "description": "Admin email address" },
+        "passwordHash": { "type": "string", "description": "Bcrypt hashed password" },
+        "activeSessionId": { "type": "string", "description": "UUID of current active single session" },
+        "updatedAt": { "type": "string", "description": "Last update timestamp" }
+      },
+      "required": ["email", "passwordHash"]
+    },
+    "Project": {
+      "title": "Project",
+      "description": "Portfolio projects managed via admin dashboard",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "Title of the project" },
+        "shortDescription": { "type": "string", "description": "Short summary" },
+        "detailedDescription": { "type": "string", "description": "Full description" },
+        "techStack": { "type": "array", "description": "List of technologies used", "items": { "type": "string" } },
+        "status": { "type": "string", "description": "Publication status (Live, Published, Draft)" },
+        "liveUrl": { "type": "string", "description": "Link to live deployment" },
+        "githubUrl": { "type": "string", "description": "Link to GitHub repository" },
+        "imageUrl": { "type": "string", "description": "Public download URL for project preview" },
+        "storagePath": { "type": "string", "description": "Firebase Storage path of image" },
+        "createdAt": { "type": "string", "description": "Creation timestamp" },
+        "updatedAt": { "type": "string", "description": "Last modification timestamp" }
+      },
+      "required": ["title", "shortDescription", "imageUrl"]
+    },
+    "Profile": {
+      "title": "Profile",
+      "description": "Personal details and portfolio profile settings",
+      "type": "object",
+      "properties": {
+        "fullName": { "type": "string", "description": "Full name of the portfolio owner" },
+        "title": { "type": "string", "description": "Professional title" },
+        "bio": { "type": "string", "description": "Short bio" },
+        "about": { "type": "string", "description": "Detailed about description" },
+        "email": { "type": "string", "description": "Public contact email" },
+        "phone": { "type": "string", "description": "Public phone number" },
+        "location": { "type": "string", "description": "Location / City" },
+        "avatarUrl": { "type": "string", "description": "Public avatar image URL" },
+        "avatarStoragePath": { "type": "string", "description": "Firebase Storage path of avatar" },
+        "socialLinks": {
+          "type": "object",
+          "description": "Social media links",
+          "properties": {
+            "facebook": { "type": "string" },
+            "twitter": { "type": "string" },
+            "linkedin": { "type": "string" },
+            "github": { "type": "string" },
+            "behance": { "type": "string" },
+            "dribbble": { "type": "string" }
+          }
+        },
+        "skills": { "type": "array", "items": { "type": "string" } },
+        "resumeUrl": { "type": "string" }
+      },
+      "required": ["fullName", "email"]
+    }
+  },
+  "firestore": {
+    "admins/root_admin": {
+      "entity": "Admin",
+      "description": "Singleton root admin record"
+    },
+    "projects/{projectId}": {
+      "entity": "Project",
+      "description": "Collection of portfolio projects"
+    },
+    "profile/main": {
+      "entity": "Profile",
+      "description": "Singleton profile data"
+    }
+  }
+}

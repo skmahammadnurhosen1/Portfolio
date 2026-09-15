@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
-import { X, Send, Copy, Check, Mail, Phone, MessageSquare, Sparkles } from 'lucide-react';
+import { X, Send, Copy, Check, Mail, Sparkles, Loader2, AlertCircle } from 'lucide-react';
 
 interface ContactModalProps {
   isOpen: boolean;
   onClose: () => void;
   darkMode: boolean;
+  email?: string;
 }
 
-export function ContactModal({ isOpen, onClose, darkMode }: ContactModalProps) {
+export function ContactModal({ isOpen, onClose, darkMode, email = 'skmahammadnurhosen1@gmail.com' }: ContactModalProps) {
   const [copied, setCopied] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -20,18 +23,50 @@ export function ContactModal({ isOpen, onClose, darkMode }: ContactModalProps) {
   if (!isOpen) return null;
 
   const handleCopyEmail = () => {
-    navigator.clipboard?.writeText('hello@noor.dev');
+    navigator.clipboard?.writeText(email);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setFormSubmitted(true);
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+      setErrorMsg('Please fill in all required fields.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setErrorMsg(null);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          subject: formData.service,
+          message: formData.message.trim(),
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to submit inquiry');
+      }
+
+      setFormSubmitted(true);
+    } catch (err: any) {
+      console.error('Contact submission error:', err);
+      setErrorMsg(err.message || 'Something went wrong. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleReset = () => {
     setFormSubmitted(false);
+    setErrorMsg(null);
     setFormData({
       name: '',
       email: '',
@@ -80,10 +115,11 @@ export function ContactModal({ isOpen, onClose, darkMode }: ContactModalProps) {
             <p className="mt-2 text-sm text-stone-600 dark:text-stone-300">
               Fill out the form below or reach out directly at{' '}
               <button
+                type="button"
                 onClick={handleCopyEmail}
                 className="font-semibold text-amber-600 dark:text-amber-400 underline decoration-amber-300 hover:text-amber-500 inline-flex items-center gap-1 cursor-pointer"
               >
-                <span>hello@noor.dev</span>
+                <span>{email}</span>
                 {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
               </button>
             </p>
@@ -164,9 +200,16 @@ export function ContactModal({ isOpen, onClose, darkMode }: ContactModalProps) {
                 />
               </div>
 
+              {errorMsg && (
+                <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 rounded-xl text-xs text-red-600 dark:text-red-400 flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  <span>{errorMsg}</span>
+                </div>
+              )}
+
               <div className="pt-2 flex items-center justify-between">
                 <a
-                  href="mailto:hello@noor.dev"
+                  href={`mailto:${email}`}
                   className="text-xs text-stone-500 hover:text-amber-600 dark:text-stone-400 dark:hover:text-amber-300 flex items-center gap-1.5"
                 >
                   <Mail className="w-3.5 h-3.5" />
@@ -175,10 +218,20 @@ export function ContactModal({ isOpen, onClose, darkMode }: ContactModalProps) {
 
                 <button
                   type="submit"
-                  className="px-6 py-2.5 rounded-full bg-amber-400 hover:bg-amber-500 text-stone-950 font-bold text-sm flex items-center gap-2 transition shadow-sm cursor-pointer active:scale-98"
+                  disabled={isSubmitting}
+                  className="px-6 py-2.5 rounded-full bg-amber-400 hover:bg-amber-500 disabled:opacity-60 text-stone-950 font-bold text-sm flex items-center gap-2 transition shadow-sm cursor-pointer active:scale-98"
                 >
-                  <Send className="w-4 h-4" />
-                  <span>Send Message</span>
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Sending...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" />
+                      <span>Send Message</span>
+                    </>
+                  )}
                 </button>
               </div>
             </form>

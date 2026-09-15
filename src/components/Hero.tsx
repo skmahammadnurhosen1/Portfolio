@@ -3,26 +3,28 @@ import { ArrowRight, Mail, Globe, Linkedin } from 'lucide-react';
 import { BehanceIcon, GithubIcon } from './TechIcons';
 import { NoorPortrait } from './NoorPortrait';
 import { AnimatedName } from './AnimatedName';
+import { ProfileData } from '../types';
 
 interface HeroProps {
   darkMode: boolean;
   onViewWork: () => void;
   onContact: () => void;
-  customPhotoUrl: string | null;
-  onOpenPhotoManager: () => void;
+  profile?: ProfileData | null;
 }
 
 export function Hero({
   darkMode,
   onViewWork,
   onContact,
-  customPhotoUrl,
-  onOpenPhotoManager,
+  profile,
 }: HeroProps) {
+  const behanceLink = profile?.socialLinks?.behance || 'https://www.behance.net';
+  const githubLink = profile?.socialLinks?.github || 'https://github.com';
+  const linkedinLink = profile?.socialLinks?.linkedin || 'https://linkedin.com';
   return (
     <section
       id="home"
-      className="relative pt-28 pb-16 md:pt-36 md:pb-24 overflow-hidden"
+      className="relative scroll-mt-20 md:scroll-mt-24 pt-24 sm:pt-28 md:pt-36 pb-16 md:pb-24 overflow-hidden"
     >
       {/* Subtle Top-Left Ambient Glow matching UI screenshot */}
       <div
@@ -36,17 +38,14 @@ export function Hero({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           {/* Left Column: Bio & Introduction */}
           <div className="lg:col-span-7 flex flex-col items-start text-left z-10">
-            {/* Friendly Greeting Pill */}
+            {/* Friendly Greeting - Normal clean text, no box background */}
             <div
-              id="hero-greeting-pill"
-              className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-5 transition-colors ${
-                darkMode
-                  ? 'bg-amber-400/15 text-amber-300 border border-amber-400/20'
-                  : 'bg-amber-100/70 text-stone-800 border border-amber-200/50'
+              id="hero-greeting"
+              className={`text-xl sm:text-2xl font-bold tracking-tight mb-2 ${
+                darkMode ? 'text-stone-300' : 'text-stone-700'
               }`}
             >
-              <span className="text-base" role="img" aria-label="waving hand">👋</span>
-              <span>Hello, I'm</span>
+              Hey I'm
             </div>
 
             {/* Massive Hero Name with Yellow Dot & Smooth NOOR -> NORA Animation */}
@@ -70,7 +69,7 @@ export function Hero({
                 darkMode ? 'text-stone-200' : 'text-stone-900'
               }`}
             >
-              Graphic Designer & Website Builder
+              {profile?.title || 'Graphic Designer & Website Builder'}
             </h2>
 
             {/* Introductory Description */}
@@ -80,8 +79,7 @@ export function Hero({
                 darkMode ? 'text-stone-400' : 'text-stone-600'
               }`}
             >
-              I create clean, modern and impactful designs, and build responsive websites
-              that help brands grow and make a lasting impression.
+              {profile?.bio || 'I create clean, modern and impactful designs, and build responsive websites that help brands grow and make a lasting impression.'}
             </p>
 
             {/* Call to Action Buttons */}
@@ -115,7 +113,7 @@ export function Hero({
             <div className="mt-10 flex items-center gap-3">
               {/* Behance */}
               <a
-                href="https://www.behance.net"
+                href={behanceLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Behance profile"
@@ -147,7 +145,7 @@ export function Hero({
 
               {/* GitHub */}
               <a
-                href="https://github.com"
+                href={githubLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="GitHub profile"
@@ -162,7 +160,7 @@ export function Hero({
 
               {/* LinkedIn */}
               <a
-                href="https://linkedin.com"
+                href={linkedinLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn profile"
@@ -179,11 +177,7 @@ export function Hero({
 
           {/* Right Column: Hero Visual with Noor's Cutout & Playful Doodle */}
           <div className="lg:col-span-5 flex items-center justify-center">
-            <NoorPortrait
-              customPhotoUrl={customPhotoUrl}
-              onOpenPhotoManager={onOpenPhotoManager}
-              darkMode={darkMode}
-            />
+            <NoorPortrait darkMode={darkMode} avatarUrl={profile?.avatarUrl} />
           </div>
         </div>
       </div>

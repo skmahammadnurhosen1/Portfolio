@@ -1,21 +1,22 @@
 import React, { useState } from 'react';
-import { Camera } from 'lucide-react';
 
 interface NoorPortraitProps {
-  customPhotoUrl: string | null;
-  onOpenPhotoManager: () => void;
   darkMode: boolean;
+  avatarUrl?: string;
 }
 
 export function NoorPortrait({
-  customPhotoUrl,
-  onOpenPhotoManager,
   darkMode,
+  avatarUrl,
 }: NoorPortraitProps) {
   const [imageError, setImageError] = useState(false);
 
-  // Primary source is customPhotoUrl (if user uploaded another), otherwise the uploaded picture /noor-profile.png
-  const imageSource = customPhotoUrl || '/noor-profile.png';
+  // Profile image for Noor from database or local default
+  const imageSource = avatarUrl || '/noor-profile.png';
+
+  React.useEffect(() => {
+    setImageError(false);
+  }, [imageSource]);
 
   return (
     <div className="relative w-full max-w-[440px] mx-auto flex items-center justify-center select-none group">
@@ -231,18 +232,6 @@ export function NoorPortrait({
             </svg>
           </span>
         </div>
-      </div>
-
-      {/* 6. Quick Photo Upload Trigger (subtle pill on hover) */}
-      <div className="absolute bottom-1 left-6 z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-        <button
-          onClick={onOpenPhotoManager}
-          title="Upload or manage profile photo"
-          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full bg-white/95 text-stone-800 shadow-md hover:bg-amber-400 hover:text-stone-900 transition-colors border border-stone-200 cursor-pointer"
-        >
-          <Camera className="w-3.5 h-3.5" />
-          <span>Change Photo</span>
-        </button>
       </div>
     </div>
   );

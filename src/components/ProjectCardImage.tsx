@@ -9,6 +9,11 @@ interface ProjectCardImageProps {
 
 export function ProjectCardImage({ project, darkMode }: ProjectCardImageProps) {
   const [imgError, setImgError] = useState(false);
+  const imgSrc = project.image || project.imageUrl;
+
+  React.useEffect(() => {
+    setImgError(false);
+  }, [imgSrc]);
 
   // Stylized high-fidelity SVG fallback mockups matching creative portfolio aesthetics
   const renderFallback = () => {
@@ -108,9 +113,9 @@ export function ProjectCardImage({ project, darkMode }: ProjectCardImageProps) {
   return (
     <div className="w-full h-52 sm:h-56 md:h-60 relative overflow-hidden bg-stone-100 dark:bg-stone-800">
       {/* Background Image / Render */}
-      {!imgError ? (
+      {!imgError && imgSrc ? (
         <img
-          src={project.image}
+          src={imgSrc}
           alt={project.title}
           referrerPolicy="no-referrer"
           onError={() => setImgError(true)}

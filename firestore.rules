@@ -1,0 +1,41 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Root Admin Singleton: Absolutely NO direct client-side read or write.
+    // All admin operations and authentication must pass through the secured Express backend using Firebase Admin SDK.
+    match /admins/{adminId} {
+      allow read, write: if false;
+    }
+
+    // Contact Messages: Absolutely NO direct client-side read or write.
+    // Inquiries can only be submitted and viewed via secured server routes.
+    match /messages/{messageId} {
+      allow read, write: if false;
+    }
+
+    // Metadata & Internal State: Completely restricted from client-side access.
+    match /metadata/{metaId} {
+      allow read, write: if false;
+    }
+
+    // Projects: Public can read published/live projects for portfolio showcase.
+    // All creation, updates, and deletion must be handled exclusively via the authenticated Admin Backend.
+    match /projects/{projectId} {
+      allow read: if resource.data.status == 'Published' || resource.data.status == 'Live';
+      allow write: if false;
+    }
+
+    // Profile: Public can read profile details.
+    // Writes are strictly server-side only.
+    match /profile/{profileId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Default deny for all other collections and subcollections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+

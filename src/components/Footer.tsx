@@ -16,12 +16,14 @@ import {
 import { BehanceIcon, GithubIcon } from './TechIcons';
 import { LegalDocType } from './LegalModal';
 import { AnimatedName } from './AnimatedName';
+import { ProfileData } from '../types';
 
 interface FooterProps {
   darkMode: boolean;
   onNavigate: (sectionId: string) => void;
   onOpenContact: () => void;
   onOpenLegal: (type: LegalDocType) => void;
+  profile?: ProfileData | null;
 }
 
 export function Footer({
@@ -29,11 +31,18 @@ export function Footer({
   onNavigate,
   onOpenContact,
   onOpenLegal,
+  profile,
 }: FooterProps) {
   const [copied, setCopied] = useState(false);
+  const displayEmail = profile?.email || 'skmahammadnurhosen1@gmail.com';
+  const displayLocation = profile?.location || 'Gangulidanga, Katwa, Purba Bardhaman, WB, 713150';
+  const displayTitle = profile?.title || 'Graphic Designer & Website Builder';
+  const behanceLink = profile?.socialLinks?.behance || 'https://www.behance.net';
+  const githubLink = profile?.socialLinks?.github || 'https://github.com';
+  const linkedinLink = profile?.socialLinks?.linkedin || 'https://linkedin.com';
 
   const handleCopyEmail = () => {
-    navigator.clipboard?.writeText('hello@noor.dev');
+    navigator.clipboard?.writeText(displayEmail);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -81,7 +90,7 @@ export function Footer({
                   : 'bg-white hover:bg-stone-50 text-stone-800 border border-stone-200 shadow-xs'
               }`}
             >
-              <span>hello@noor.dev</span>
+              <span>{displayEmail}</span>
               {copied ? (
                 <Check className="w-3.5 h-3.5 text-emerald-500" />
               ) : (
@@ -142,7 +151,7 @@ export function Footer({
             {/* Social Icons row */}
             <div className="mt-6 flex items-center gap-3">
               <a
-                href="https://www.behance.net"
+                href={behanceLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Behance"
@@ -168,7 +177,7 @@ export function Footer({
               </a>
 
               <a
-                href="https://github.com"
+                href={githubLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="GitHub"
@@ -182,7 +191,7 @@ export function Footer({
               </a>
 
               <a
-                href="https://linkedin.com"
+                href={linkedinLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
@@ -315,7 +324,7 @@ export function Footer({
                 <MapPin className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
                 <div>
                   <span className="font-semibold block text-stone-800 dark:text-stone-200">
-                    Dhaka, Bangladesh
+                    {displayLocation}
                   </span>
                   <span className="text-xs text-stone-500 dark:text-stone-400">
                     Available for Remote Worldwide
@@ -342,7 +351,7 @@ export function Footer({
                     onClick={handleCopyEmail}
                     className="font-semibold text-amber-600 dark:text-amber-400 hover:underline flex items-center gap-1 cursor-pointer"
                   >
-                    <span>hello@noor.dev</span>
+                    <span>{displayEmail}</span>
                   </button>
                   <span className="text-xs text-stone-500 dark:text-stone-400 block">
                     Replies within 12–24 hours
@@ -402,19 +411,21 @@ export function Footer({
             Designed &amp; Built with clean code and modern typography by Noor.
           </p>
 
-          {/* Back to Top */}
-          <button
-            onClick={scrollToTop}
-            aria-label="Back to top"
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all cursor-pointer ${
-              darkMode
-                ? 'bg-stone-800 hover:bg-stone-700 text-stone-300'
-                : 'bg-white hover:bg-stone-100 text-stone-700 border border-stone-200 shadow-2xs'
-            }`}
-          >
-            <span>Back to top</span>
-            <ArrowUp className="w-3.5 h-3.5 text-amber-500" />
-          </button>
+          {/* Actions: Back to Top */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={scrollToTop}
+              aria-label="Back to top"
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all cursor-pointer ${
+                darkMode
+                  ? 'bg-stone-800 hover:bg-stone-700 text-stone-300'
+                  : 'bg-white hover:bg-stone-100 text-stone-700 border border-stone-200 shadow-2xs'
+              }`}
+            >
+              <span>Back to top</span>
+              <ArrowUp className="w-3.5 h-3.5 text-amber-500" />
+            </button>
+          </div>
         </div>
       </div>
     </footer>

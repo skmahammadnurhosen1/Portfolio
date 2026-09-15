@@ -1,0 +1,124 @@
+{
+  "admins": {
+    "root_admin": {
+      "email": "skmahammadnurhosen1@gmail.com",
+      "passwordHash": "$2b$12$.FjP3dSU9Wjkxz8dg3bNEOjrkaz2VPL94ArU.FI9tIh0Sl06kVnQa",
+      "activeSessionId": "795a8ff6-87b0-47e5-8b99-54da1f177bf4",
+      "updatedAt": "2026-09-15T08:44:14.643Z"
+    }
+  },
+  "projects": {
+    "proj-1789461399174": {
+      "id": "proj-1789461399174",
+      "title": "Furniture website",
+      "category": "Web Development",
+      "shortDescription": "Modern, responsive e-commerce storefront for furniture and interior design.",
+      "description": "Modern, responsive e-commerce storefront for furniture and interior design.",
+      "detailedDescription": "A high-performance furniture e-commerce website built with React, TypeScript, and Tailwind CSS. Features intuitive catalog navigation, responsive product showcases, and an elegant shopping experience.",
+      "techStack": [
+        "React",
+        "TypeScript",
+        "Tailwind CSS"
+      ],
+      "tags": [
+        "React",
+        "TypeScript",
+        "Tailwind CSS"
+      ],
+      "client": "Luna E-Com",
+      "year": "2026",
+      "status": "Live",
+      "liveUrl": "https://luna-e-com.netlify.app/",
+      "githubUrl": "https://luna-e-com.netlify.app/",
+      "imageUrl": "/uploads/projects/e2240b49-f799-4b45-8212-b57d1b5583e4.png",
+      "image": "/uploads/projects/e2240b49-f799-4b45-8212-b57d1b5583e4.png",
+      "storagePath": "projects/e2240b49-f799-4b45-8212-b57d1b5583e4.png",
+      "fullDetails": {
+        "overview": "A high-performance furniture e-commerce website built with React, TypeScript, and Tailwind CSS. Features intuitive catalog navigation, responsive product showcases, and an elegant shopping experience.",
+        "tools": [
+          "React",
+          "TypeScript",
+          "Tailwind CSS"
+        ],
+        "deliverables": [
+          "Custom UI Components",
+          "Responsive Layout",
+          "Optimized Assets"
+        ],
+        "results": "Fast loading times and an intuitive shopping experience across all devices."
+      },
+      "createdAt": "2026-09-15T08:36:39.174Z",
+      "updatedAt": "2026-09-15T08:36:39.174Z"
+    }
+  },
+  "profile": {
+    "main": {
+      "fullName": "Noor",
+      "title": "Graphic Designer & Website Builder",
+      "bio": "I create clean, modern and impactful designs, and build responsive websites that help brands grow and make a lasting impression.",
+      "about": "I'm Noor, a passionate creative designer and website builder. I love turning ideas into beautiful designs and functional websites that solve real problems and create value.",
+      "email": "skmahammadnurhosen1@gmail.com",
+      "phone": "+91 91448 19540",
+      "location": "Gangulidanga,Katwa,Bardhoman,WB,713150",
+      "avatarUrl": "/file_00000000704c8230a66055ead8603089.png",
+      "avatarStoragePath": "profile/avatar-main.png",
+      "socialLinks": {
+        "facebook": "https://facebook.com",
+        "twitter": "https://x.com",
+        "linkedin": "https://linkedin.com",
+        "github": "https://github.com",
+        "behance": "https://behance.net",
+        "dribbble": "https://dribbble.com"
+      },
+      "skills": [
+        "React",
+        "TypeScript",
+        "Tailwind CSS",
+        "Node.js",
+        "Express",
+        "Firebase",
+        "Figma",
+        "Photoshop",
+        "Illustrator",
+        "CorelDRAW"
+      ],
+      "services": [
+        {
+          "id": "graphic-design",
+          "title": "Graphic Design",
+          "description": "Logos, social media posts, branding, print & digital design.",
+          "iconName": "design"
+        },
+        {
+          "id": "web-development",
+          "title": "Web Development",
+          "description": "Modern, responsive and fast websites using modern technologies.",
+          "iconName": "code"
+        },
+        {
+          "id": "creative-solutions",
+          "title": "Creative Solutions",
+          "description": "Clean design, smooth user experience and results that matter.",
+          "iconName": "sparkle"
+        }
+      ],
+      "resumeUrl": "/uploads/cv/73707316-71b2-4e62-b89a-1ac0a8c6daf2.pdf",
+      "cvFileName": "SREEKHANDA_asd_2026-08-18.pdf",
+      "cvStoragePath": "cv/73707316-71b2-4e62-b89a-1ac0a8c6daf2.pdf",
+      "cvFileSize": 82008,
+      "cvUpdatedAt": "2026-09-15T08:46:58.966Z",
+      "updatedAt": "2026-09-15T08:46:58.966Z"
+    }
+  },
+  "messages": {
+    "msg-1789460990159": {
+      "name": "Hosen",
+      "email": "hasen124354@gmail.com",
+      "subject": "Web Development",
+      "message": "Hey can you help me",
+      "id": "msg-1789460990159",
+      "read": false,
+      "createdAt": "2026-09-15T08:29:50.159Z"
+    }
+  }
+}

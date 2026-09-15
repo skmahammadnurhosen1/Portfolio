@@ -2,33 +2,78 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { projectsData } from '../data/portfolioData';
 import { Project } from '../types';
-import { ArrowUpRight, Sparkles, Layers, Briefcase, Filter } from 'lucide-react';
+import { ArrowUpRight, Sparkles, Layers, Briefcase, Filter, Loader2, Globe, Palette } from 'lucide-react';
 import { ProjectCardImage } from './ProjectCardImage';
 
 interface ProjectsProps {
   darkMode: boolean;
   onSelectProject: (project: Project) => void;
+  projects?: Project[];
+  loading?: boolean;
 }
 
-export function Projects({ darkMode, onSelectProject }: ProjectsProps) {
+export function Projects({ darkMode, onSelectProject, projects, loading }: ProjectsProps) {
   const [activeCategory, setActiveCategory] = useState<string>('All');
   const [showAll, setShowAll] = useState(false);
 
+  // Use database projects passed from App.tsx, filtering out Drafts
+  const availableProjects = (Array.isArray(projects) ? projects : projectsData)
+    .filter((p) => p.status !== 'Draft');
+
+  const isGraphics = (p: Project) => {
+    return (
+      p.projectType === 'graphics' ||
+      p.category === 'Graphics Design' ||
+      p.category === 'Branding' ||
+      p.category === 'UI/UX Design' ||
+      p.category === 'Logo Design' ||
+      p.category === 'Graphic Design'
+    );
+  };
+
   const categories = [
-    { id: 'All', label: 'All Projects', count: projectsData.length },
-    { id: 'Branding', label: 'Branding', count: projectsData.filter((p) => p.category === 'Branding').length },
-    { id: 'Web Development', label: 'Web Dev', count: projectsData.filter((p) => p.category === 'Web Development').length },
-    { id: 'UI/UX Design', label: 'UI/UX Design', count: projectsData.filter((p) => p.category === 'UI/UX Design').length },
+    { id: 'All', label: 'All Projects', count: availableProjects.length },
+    {
+      id: 'Websites',
+      label: '🌐 Websites',
+      count: availableProjects.filter((p) => !isGraphics(p)).length,
+    },
+    {
+      id: 'Graphics',
+      label: '🎨 Graphics Design',
+      count: availableProjects.filter((p) => isGraphics(p)).length,
+    },
+    {
+      id: 'Branding',
+      label: 'Branding',
+      count: availableProjects.filter(
+        (p) => p.category === 'Branding' || p.designSubtype === 'Branding & Identity'
+      ).length,
+    },
+    {
+      id: 'UI/UX Design',
+      label: 'UI/UX Design',
+      count: availableProjects.filter(
+        (p) => p.category === 'UI/UX Design' || p.designSubtype === 'UI/UX Design'
+      ).length,
+    },
   ];
 
-  const filteredProjects = activeCategory === 'All'
-    ? projectsData
-    : projectsData.filter((p) => p.category === activeCategory);
+  const filteredProjects = availableProjects.filter((p) => {
+    if (activeCategory === 'All') return true;
+    if (activeCategory === 'Websites') return !isGraphics(p);
+    if (activeCategory === 'Graphics') return isGraphics(p);
+    if (activeCategory === 'Branding')
+      return p.category === 'Branding' || p.designSubtype === 'Branding & Identity';
+    if (activeCategory === 'UI/UX Design')
+      return p.category === 'UI/UX Design' || p.designSubtype === 'UI/UX Design';
+    return p.category === activeCategory;
+  });
 
   const displayedProjects = showAll ? filteredProjects : filteredProjects.slice(0, 6);
 
   return (
-    <section id="portfolio" className="py-20 md:py-28 relative overflow-hidden">
+    <section id="portfolio" className="py-20 md:py-28 relative overflow-hidden scroll-mt-20 md:scroll-mt-24">
       {/* Subtle Background Radial Glow */}
       <div
         className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] rounded-full pointer-events-none opacity-20 dark:opacity-10 blur-3xl"
@@ -112,111 +157,153 @@ export function Projects({ darkMode, onSelectProject }: ProjectsProps) {
         {/* Project Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 sm:gap-8">
           <AnimatePresence mode="popLayout">
-            {displayedProjects.map((project, idx) => (
-              <motion.div
-                key={project.id}
-                layout
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.35, delay: idx * 0.05 }}
-                id={`project-card-${project.id}`}
-                onClick={() => onSelectProject(project)}
-                className={`group relative rounded-[26px] overflow-hidden flex flex-col transition-all duration-300 cursor-pointer border ${
-                  darkMode
-                    ? 'bg-[#18181B] border-stone-800/90 hover:border-amber-400/60 shadow-[0_4px_24px_-8px_rgba(0,0,0,0.4)] hover:shadow-[0_20px_40px_-15px_rgba(245,158,11,0.18)]'
-                    : 'bg-white border-stone-200/90 shadow-[0_4px_20px_-8px_rgba(0,0,0,0.06)] hover:border-amber-400 hover:shadow-[0_20px_40px_-15px_rgba(245,158,11,0.15)]'
-                } hover:-translate-y-2`}
-              >
-                {/* Visual Image Header */}
-                <div className="relative">
-                  <ProjectCardImage project={project} darkMode={darkMode} />
-                </div>
+            {displayedProjects.map((project, idx) => {
+              const projectIsGraphics = isGraphics(project);
+              const displayTags = projectIsGraphics
+                ? project.designTools && project.designTools.length > 0
+                  ? project.designTools
+                  : project.tags
+                : project.techStack && project.techStack.length > 0
+                ? project.techStack
+                : project.tags;
 
-                {/* Card Body */}
-                <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between">
-                  <div className="space-y-3">
-                    {/* Client & Metadata Row */}
-                    <div className="flex items-center justify-between text-xs text-stone-500 dark:text-stone-400">
-                      <span className="font-semibold text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                        {project.client}
+              return (
+                <motion.div
+                  key={project.id}
+                  layout
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.35, delay: idx * 0.05 }}
+                  id={`project-card-${project.id}`}
+                  onClick={() => onSelectProject(project)}
+                  className={`group relative rounded-[26px] overflow-hidden flex flex-col transition-all duration-300 cursor-pointer border ${
+                    darkMode
+                      ? 'bg-[#18181B] border-stone-800/90 hover:border-amber-400/60 shadow-[0_4px_24px_-8px_rgba(0,0,0,0.4)] hover:shadow-[0_20px_40px_-15px_rgba(245,158,11,0.18)]'
+                      : 'bg-white border-stone-200/90 shadow-[0_4px_20px_-8px_rgba(0,0,0,0.06)] hover:border-amber-400 hover:shadow-[0_20px_40px_-15px_rgba(245,158,11,0.15)]'
+                  } hover:-translate-y-2`}
+                >
+                  {/* Visual Image Header */}
+                  <div className="relative">
+                    <ProjectCardImage project={project} darkMode={darkMode} />
+
+                    {/* Top Left Project Type Indicator Badge */}
+                    <div className="absolute top-3.5 left-3.5 z-20">
+                      <span
+                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold backdrop-blur-md border shadow-sm ${
+                          projectIsGraphics
+                            ? 'bg-stone-950/80 text-amber-300 border-amber-400/30'
+                            : 'bg-stone-950/80 text-white border-white/15'
+                        }`}
+                      >
+                        {projectIsGraphics ? (
+                          <Palette className="w-3 h-3 text-amber-400" />
+                        ) : (
+                          <Globe className="w-3 h-3 text-emerald-400" />
+                        )}
+                        <span>{projectIsGraphics ? 'Graphics Design' : 'Website'}</span>
                       </span>
-                      {project.year && (
-                        <span className="font-medium text-stone-400 dark:text-stone-500">
-                          {project.year}
-                        </span>
-                      )}
                     </div>
 
-                    {/* Project Title */}
-                    <h3
-                      className={`text-xl sm:text-[22px] font-black tracking-tight leading-snug transition-colors group-hover:text-amber-500 dark:group-hover:text-amber-400 ${
-                        darkMode ? 'text-white' : 'text-[#18181B]'
-                      }`}
-                    >
-                      {project.title}
-                    </h3>
-
-                    {/* Project Description */}
-                    <p
-                      className={`text-sm leading-relaxed line-clamp-2 ${
-                        darkMode ? 'text-stone-400' : 'text-stone-600'
-                      }`}
-                    >
-                      {project.description}
-                    </p>
-
-                    {/* Deliverable & Tech Stack Badges */}
-                    {project.tags && project.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5 pt-1">
-                        {project.tags.slice(0, 3).map((tag, tagIdx) => (
-                          <span
-                            key={tagIdx}
-                            className={`text-[11px] font-semibold px-2.5 py-1 rounded-md transition-colors ${
-                              darkMode
-                                ? 'bg-stone-800/90 text-stone-300 border border-stone-700/50 group-hover:border-stone-600'
-                                : 'bg-stone-100 text-stone-700 border border-stone-200/60 group-hover:bg-amber-50 group-hover:text-amber-900 group-hover:border-amber-200/50'
-                            }`}
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                        {project.tags.length > 3 && (
-                          <span
-                            className={`text-[11px] font-semibold px-2 py-1 rounded-md ${
-                              darkMode
-                                ? 'bg-stone-800/50 text-stone-500'
-                                : 'bg-stone-100 text-stone-400'
-                            }`}
-                          >
-                            +{project.tags.length - 3}
-                          </span>
-                        )}
+                    {/* Top Right Live Demo or Showcase Badge */}
+                    {project.liveUrl && (
+                      <div className="absolute top-3.5 right-3.5 z-20">
+                        <span
+                          title={projectIsGraphics ? 'Design Showcase Available' : 'Live Demo Available'}
+                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-stone-950/80 text-white backdrop-blur-md border border-white/15 shadow-sm"
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                          <span>{projectIsGraphics ? 'Showcase' : 'Live Demo'}</span>
+                        </span>
                       </div>
                     )}
                   </div>
 
-                  {/* Card Bottom: Case Study Link & Signature Amber Action Button */}
-                  <div className="mt-6 pt-4 border-t border-stone-100 dark:border-stone-800/80 flex items-center justify-between">
-                    <span className="text-xs font-bold text-stone-500 dark:text-stone-400 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors flex items-center gap-1">
-                      <span>View Case Study</span>
-                    </span>
+                  {/* Card Body */}
+                  <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between">
+                    <div className="space-y-3">
+                      {/* Client & Metadata Row */}
+                      <div className="flex items-center justify-between text-xs text-stone-500 dark:text-stone-400">
+                        <span className="font-semibold text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                          {project.client}
+                        </span>
+                        {project.year && (
+                          <span className="font-medium text-stone-400 dark:text-stone-500">
+                            {project.year}
+                          </span>
+                        )}
+                      </div>
 
-                    {/* Iconic Amber Action Button with Hover Rotation */}
-                    <div
-                      aria-label={`Open ${project.title}`}
-                      className="w-10 h-10 rounded-full bg-amber-400 group-hover:bg-amber-500 text-stone-950 flex items-center justify-center transition-all duration-300 group-hover:scale-110 shadow-sm group-hover:shadow-md group-hover:shadow-amber-400/25"
-                    >
-                      <ArrowUpRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                      {/* Project Title */}
+                      <h3
+                        className={`text-xl sm:text-[22px] font-black tracking-tight leading-snug transition-colors group-hover:text-amber-500 dark:group-hover:text-amber-400 ${
+                          darkMode ? 'text-white' : 'text-[#18181B]'
+                        }`}
+                      >
+                        {project.title}
+                      </h3>
+
+                      {/* Project Description */}
+                      <p
+                        className={`text-sm leading-relaxed line-clamp-2 ${
+                          darkMode ? 'text-stone-400' : 'text-stone-600'
+                        }`}
+                      >
+                        {project.description}
+                      </p>
+
+                      {/* Deliverable & Tech / Design Tool Badges */}
+                      {displayTags && displayTags.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 pt-1">
+                          {displayTags.slice(0, 3).map((tag, tagIdx) => (
+                            <span
+                              key={tagIdx}
+                              className={`text-[11px] font-semibold px-2.5 py-1 rounded-md transition-colors ${
+                                darkMode
+                                  ? 'bg-stone-800/90 text-stone-300 border border-stone-700/50 group-hover:border-stone-600'
+                                  : 'bg-stone-100 text-stone-700 border border-stone-200/60 group-hover:bg-amber-50 group-hover:text-amber-900 group-hover:border-amber-200/50'
+                              }`}
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                          {displayTags.length > 3 && (
+                            <span
+                              className={`text-[11px] font-semibold px-2 py-1 rounded-md ${
+                                darkMode
+                                  ? 'bg-stone-800/50 text-stone-500'
+                                  : 'bg-stone-100 text-stone-400'
+                              }`}
+                            >
+                              +{displayTags.length - 3}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Card Bottom: Case Study Link & Signature Amber Action Button */}
+                    <div className="mt-6 pt-4 border-t border-stone-100 dark:border-stone-800/80 flex items-center justify-between">
+                      <span className="text-xs font-bold text-stone-500 dark:text-stone-400 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors flex items-center gap-1">
+                        <span>{projectIsGraphics ? 'View Design Project' : 'View Case Study'}</span>
+                      </span>
+
+                      {/* Iconic Amber Action Button with Hover Rotation */}
+                      <div
+                        aria-label={`Open ${project.title}`}
+                        className="w-10 h-10 rounded-full bg-amber-400 group-hover:bg-amber-500 text-stone-950 flex items-center justify-center transition-all duration-300 group-hover:scale-110 shadow-sm group-hover:shadow-md group-hover:shadow-amber-400/25"
+                      >
+                        <ArrowUpRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Bottom Card Amber Highlight Edge on Hover */}
-                <div className="absolute bottom-0 inset-x-0 h-[3px] bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </motion.div>
-            ))}
+                  {/* Bottom Card Amber Highlight Edge on Hover */}
+                  <div className="absolute bottom-0 inset-x-0 h-[3px] bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </motion.div>
+              );
+            })}
           </AnimatePresence>
         </div>
 

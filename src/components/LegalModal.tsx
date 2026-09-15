@@ -34,7 +34,7 @@ export function LegalModal({ type, onClose, darkMode }: LegalModalProps) {
             },
             {
               heading: '4. Contact & Inquiries',
-              text: 'If you have any questions about this Privacy Policy or your data, please contact hello@noor.dev.',
+              text: 'If you have any questions about this Privacy Policy or your data, please contact skmahammadnurhosen1@gmail.com.',
             },
           ],
         };
