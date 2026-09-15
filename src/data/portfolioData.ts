@@ -1,7 +1,4 @@
 import { Project, Skill, Service } from '../types';
-import { defaultInitialProjects, defaultProfileData } from '../lib/clientDatabase';
-
-export { defaultProfileData };
 
 export const servicesData: Service[] = [
   {
@@ -53,5 +50,101 @@ export const skillsData: Skill[] = [
   { name: 'GitHub', category: 'Platform', iconType: 'github', color: '#6B7280' },
 ];
 
-export const projectsData: Project[] = defaultInitialProjects;
-
+export const projectsData: Project[] = [
+  {
+    id: 'brand-identity',
+    title: 'Brand Identity Design',
+    category: 'Branding',
+    description: 'Logo, business card & brand guidelines for a modern brand.',
+    image: 'https://images.unsplash.com/photo-1634942537034-2531766767d1?q=80&w=900&auto=format&fit=crop',
+    client: 'Vanguard Corp',
+    year: '2024',
+    tags: ['Branding', 'Typography', 'Visual Identity', 'Print Design'],
+    fullDetails: {
+      overview: 'A complete visual identity redesign featuring black and gold luxury stationery, custom business cards, brand guide, typography rules, and sleek corporate presentation decks.',
+      tools: ['Adobe Illustrator', 'Photoshop', 'Figma'],
+      deliverables: ['Primary & Secondary Logos', 'Business Card Suites', 'Letterheads & Stationery', 'Comprehensive Brand Manual'],
+      results: 'Increased client brand perception score by 45% and unified company touchpoints across 3 international offices.',
+    },
+  },
+  {
+    id: 'portfolio-website',
+    title: 'Portfolio Website',
+    category: 'Web Development',
+    description: 'A clean and modern portfolio website to showcase my work and skills.',
+    image: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=900&auto=format&fit=crop',
+    client: 'Personal & Creative Studio',
+    year: '2025',
+    tags: ['React', 'Tailwind CSS', 'TypeScript', 'Responsive Design'],
+    fullDetails: {
+      overview: 'Built a high-performance, responsive portfolio website featuring a sunny cream aesthetic, smooth transitions, interactive modals, and optimized mobile layouts.',
+      tools: ['React', 'TypeScript', 'Tailwind CSS', 'Vite'],
+      deliverables: ['Custom Web Application', 'Interactive Project Showcase', 'Contact Modal with Direct Actions', 'Full Dark/Light Theme Support'],
+      results: 'Achieved 100/100 Lighthouse performance score with sub-second page loads and zero layout shift.',
+    },
+  },
+  {
+    id: 'social-media-design',
+    title: 'Social Media Design',
+    category: 'UI/UX Design',
+    description: 'Creative posts for brands, events and social media platforms.',
+    image: 'https://images.unsplash.com/photo-1616469829941-c7200edec809?q=80&w=900&auto=format&fit=crop',
+    client: 'Pulse Marketing Agency',
+    year: '2024',
+    tags: ['UI/UX', 'Social Media', 'Content Creation', 'Motion Graphics'],
+    fullDetails: {
+      overview: 'Created a modular social media design kit for Instagram, LinkedIn, and Twitter with cohesive yellow-accented layouts, carousel templates, and high-conversion story graphics.',
+      tools: ['Figma', 'Photoshop', 'After Effects'],
+      deliverables: ['30+ Modular Post Templates', 'Story Highlight Covers', 'Animated Launch Teasers', 'Design System Guidelines'],
+      results: 'Boosted client engagement by 68% and doubled weekly follower growth within the first month of rollout.',
+    },
+  },
+  {
+    id: 'ecommerce-redesign',
+    title: 'Luxe Minimalist Store',
+    category: 'Web Development',
+    description: 'Clean e-commerce interface with rapid checkout and micro-interactions.',
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=900&auto=format&fit=crop',
+    client: 'Aura Lifestyle',
+    year: '2024',
+    tags: ['React', 'Tailwind CSS', 'Next.js', 'E-commerce'],
+    fullDetails: {
+      overview: 'Designed and developed a minimalist lifestyle storefront focused on conversion optimization and frictionless mobile shopping.',
+      tools: ['React', 'Tailwind CSS', 'Figma'],
+      deliverables: ['Storefront UI', 'Product Detail Screens', 'Streamlined Cart Flow'],
+      results: 'Reduced cart abandonment rate by 22%.',
+    },
+  },
+  {
+    id: 'fintech-dashboard',
+    title: 'Nova Financial Suite',
+    category: 'UI/UX Design',
+    description: 'Intuitive analytics and portfolio tracking dashboard for digital assets.',
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=900&auto=format&fit=crop',
+    client: 'Nova Protocol',
+    year: '2024',
+    tags: ['Dashboard', 'Fintech', 'Design System', 'Data Viz'],
+    fullDetails: {
+      overview: 'Created a comprehensive financial dashboard with clear data visualizations, dark-mode-first aesthetic, and rapid transaction workflows.',
+      tools: ['Figma', 'Tokens Studio'],
+      deliverables: ['Full Design System', '40+ Screen Flows', 'Interactive Prototype'],
+      results: 'Successfully raised $2.5M Seed round backed by prototype demonstrations.',
+    },
+  },
+  {
+    id: 'artisan-coffee-brand',
+    title: 'Roast & Revel Identity',
+    category: 'Branding',
+    description: 'Artisanal coffee packaging, typography, and branded merchandise.',
+    image: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=900&auto=format&fit=crop',
+    client: 'Roast & Revel Roasters',
+    year: '2023',
+    tags: ['Packaging', 'Illustration', 'Print', 'Brand Strategy'],
+    fullDetails: {
+      overview: 'Full package identity for specialty single-origin coffee beans, including custom hand-drawn motifs, compostable bag designs, and cafe collateral.',
+      tools: ['Illustrator', 'Procreate', 'InDesign'],
+      deliverables: ['Coffee Bag Packaging', 'Cup Sleeves & Menus', 'Merchandise Line'],
+      results: 'Sold out initial batch of 5,000 bags in the first 48 hours of launch.',
+    },
+  },
+];

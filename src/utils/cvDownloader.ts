@@ -4,8 +4,6 @@
  * by fetching binary or base64 data over same-origin API and generating local in-memory Blob URLs.
  */
 
-import { clientDatabase } from '../lib/clientDatabase';
-
 export interface CvDataResponse {
   success: boolean;
   fileName: string;
@@ -57,65 +55,40 @@ export async function fetchCvBlob(): Promise<{ blob: Blob; fileName: string; fil
     console.warn('JSON CV fetch failed, trying direct stream fetch:', err);
   }
 
-  // Fallback: fetch directly from /api/profile/cv/download or static assets
-  try {
-    const streamRes = await fetch('/api/profile/cv/download', {
-      method: 'GET',
-      headers: {
-        Accept: 'application/pdf, application/octet-stream',
-      },
-    });
+  // Fallback: fetch directly from /api/profile/cv/download
+  const streamRes = await fetch('/api/profile/cv/download', {
+    method: 'GET',
+    headers: {
+      Accept: 'application/pdf, application/octet-stream',
+    },
+  });
 
-    if (streamRes.ok) {
-      const contentType = streamRes.headers.get('content-type') || '';
-      if (!contentType.includes('text/html')) {
-        let fileName = 'Noor_Resume_CV.pdf';
-        const disposition = streamRes.headers.get('content-disposition');
-        if (disposition && disposition.includes('filename=')) {
-          const match = disposition.match(/filename="?([^"]+)"?/);
-          if (match && match[1]) {
-            fileName = match[1];
-          }
-        }
-        const blob = await streamRes.blob();
-        return { blob, fileName };
-      }
-    }
-  } catch (err) {
-    console.warn('API CV stream fetch failed, trying static / client fallback:', err);
-  }
-
-  // Autonomous Static / Netlify Fallback: fetch from profile.resumeUrl
-  const profile = clientDatabase.getProfile();
-  if (profile?.resumeUrl) {
-    if (profile.resumeUrl.startsWith('data:')) {
-      const parts = profile.resumeUrl.split(',');
-      const byteCharacters = atob(parts[1] || parts[0]);
-      const byteNumbers = new Uint8Array(byteCharacters.length);
-      for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
-      }
-      const blob = new Blob([byteNumbers], { type: 'application/pdf' });
-      return {
-        blob,
-        fileName: profile.cvFileName || 'Noor_Resume_CV.pdf',
-        fileSize: byteNumbers.length,
-      };
-    }
-
+  if (!streamRes.ok) {
+    let errMsg = 'Could not download CV file.';
     try {
-      const staticRes = await fetch(profile.resumeUrl);
-      if (staticRes.ok) {
-        const blob = await staticRes.blob();
-        return {
-          blob,
-          fileName: profile.cvFileName || 'Noor_Resume_CV.pdf',
-        };
-      }
+      const errJson = await streamRes.json();
+      if (errJson.error) errMsg = errJson.error;
     } catch (_) {}
+    throw new Error(errMsg);
   }
 
-  throw new Error('CV document is not available at this moment.');
+  const contentType = streamRes.headers.get('content-type') || '';
+  if (contentType.includes('text/html')) {
+    throw new Error('Received unexpected HTML response while trying to download PDF.');
+  }
+
+  // Parse filename from Content-Disposition if present
+  let fileName = 'Noor_Resume_CV.pdf';
+  const disposition = streamRes.headers.get('content-disposition');
+  if (disposition && disposition.includes('filename=')) {
+    const match = disposition.match(/filename="?([^"]+)"?/);
+    if (match && match[1]) {
+      fileName = match[1];
+    }
+  }
+
+  const blob = await streamRes.blob();
+  return { blob, fileName };
 }
 
 /**

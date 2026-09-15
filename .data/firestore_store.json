@@ -3,8 +3,8 @@
     "root_admin": {
       "email": "skmahammadnurhosen1@gmail.com",
       "passwordHash": "$2b$12$.FjP3dSU9Wjkxz8dg3bNEOjrkaz2VPL94ArU.FI9tIh0Sl06kVnQa",
-      "activeSessionId": null,
-      "updatedAt": "2026-09-15T10:03:15.827Z"
+      "activeSessionId": "795a8ff6-87b0-47e5-8b99-54da1f177bf4",
+      "updatedAt": "2026-09-15T08:44:14.643Z"
     }
   },
   "projects": {
@@ -12,9 +12,9 @@
       "id": "proj-1789461399174",
       "title": "Furniture website",
       "category": "Web Development",
-      "shortDescription": "It is a demo project.",
-      "description": "It is a demo project.",
-      "detailedDescription": "It is a demo project.Made to showcase.If you want, we can make your website even more beautiful at a very low cost.",
+      "shortDescription": "Modern, responsive e-commerce storefront for furniture and interior design.",
+      "description": "Modern, responsive e-commerce storefront for furniture and interior design.",
+      "detailedDescription": "A high-performance furniture e-commerce website built with React, TypeScript, and Tailwind CSS. Features intuitive catalog navigation, responsive product showcases, and an elegant shopping experience.",
       "techStack": [
         "React",
         "TypeScript",
@@ -25,7 +25,7 @@
         "TypeScript",
         "Tailwind CSS"
       ],
-      "client": "Demo project",
+      "client": "Luna E-Com",
       "year": "2026",
       "status": "Live",
       "liveUrl": "https://luna-e-com.netlify.app/",
@@ -34,61 +34,21 @@
       "image": "/uploads/projects/e2240b49-f799-4b45-8212-b57d1b5583e4.png",
       "storagePath": "projects/e2240b49-f799-4b45-8212-b57d1b5583e4.png",
       "fullDetails": {
-        "overview": "It is a demo project.Made to showcase.If you want, we can make your website even more beautiful at a very low cost.",
+        "overview": "A high-performance furniture e-commerce website built with React, TypeScript, and Tailwind CSS. Features intuitive catalog navigation, responsive product showcases, and an elegant shopping experience.",
         "tools": [
           "React",
           "TypeScript",
           "Tailwind CSS"
         ],
         "deliverables": [
-          "Custom Assets",
-          "Clean Interface"
+          "Custom UI Components",
+          "Responsive Layout",
+          "Optimized Assets"
         ],
-        "results": "High engagement and production performance."
+        "results": "Fast loading times and an intuitive shopping experience across all devices."
       },
       "createdAt": "2026-09-15T08:36:39.174Z",
       "updatedAt": "2026-09-15T08:36:39.174Z"
-    },
-    "proj-1789466580128": {
-      "id": "proj-1789466580128",
-      "title": "Hrryyrhyyt",
-      "category": "UI/UX Design",
-      "shortDescription": "Nfjfbfjbbf",
-      "description": "Nfjfbfjbbf",
-      "detailedDescription": "Nfjfbfjbbf",
-      "techStack": [
-        "React",
-        "TypeScript",
-        "Tailwind CSS"
-      ],
-      "tags": [
-        "React",
-        "TypeScript",
-        "Tailwind CSS"
-      ],
-      "client": "Hthhthhth",
-      "year": "2026",
-      "status": "Live",
-      "liveUrl": "",
-      "githubUrl": "",
-      "imageUrl": "/uploads/projects/089afd7a-3ddb-4f4d-9666-b1bdadde9c21.jpg",
-      "image": "/uploads/projects/089afd7a-3ddb-4f4d-9666-b1bdadde9c21.jpg",
-      "storagePath": "projects/089afd7a-3ddb-4f4d-9666-b1bdadde9c21.jpg",
-      "fullDetails": {
-        "overview": "Nfjfbfjbbf",
-        "tools": [
-          "React",
-          "TypeScript",
-          "Tailwind CSS"
-        ],
-        "deliverables": [
-          "Custom Assets",
-          "Clean Interface"
-        ],
-        "results": "High engagement and production performance."
-      },
-      "createdAt": "2026-09-15T10:03:00.128Z",
-      "updatedAt": "2026-09-15T10:03:00.128Z"
     }
   },
   "profile": {
@@ -142,12 +102,12 @@
           "iconName": "sparkle"
         }
       ],
-      "resumeUrl": "/uploads/cv/175f8b3f-6a27-4fb0-ba5d-47c1bc7a978b.pdf",
-      "cvFileName": "2026-09-15 15-22-18.pdf",
-      "cvStoragePath": "cv/175f8b3f-6a27-4fb0-ba5d-47c1bc7a978b.pdf",
-      "cvFileSize": 2570690,
-      "cvUpdatedAt": "2026-09-15T09:52:38.818Z",
-      "updatedAt": "2026-09-15T09:52:38.819Z"
+      "resumeUrl": "/uploads/cv/73707316-71b2-4e62-b89a-1ac0a8c6daf2.pdf",
+      "cvFileName": "SREEKHANDA_asd_2026-08-18.pdf",
+      "cvStoragePath": "cv/73707316-71b2-4e62-b89a-1ac0a8c6daf2.pdf",
+      "cvFileSize": 82008,
+      "cvUpdatedAt": "2026-09-15T08:46:58.966Z",
+      "updatedAt": "2026-09-15T08:46:58.966Z"
     }
   },
   "messages": {
