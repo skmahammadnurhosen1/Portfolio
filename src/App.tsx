@@ -15,7 +15,7 @@ import { ProjectDetailPage } from './components/ProjectDetailPage';
 import { ContactModal } from './components/ContactModal';
 import { LegalModal, LegalDocType } from './components/LegalModal';
 import { Project, ProfileData } from './types';
-import { projectsData } from './data/portfolioData';
+import { projectsData, defaultProfileData } from './data/portfolioData';
 import { AdminPanel } from './components/AdminPanel/AdminPanel';
 import { LoginScreen } from './components/AdminPanel/LoginScreen';
 import { api } from './components/AdminPanel/api';
@@ -48,47 +48,35 @@ export default function App() {
   const [checkingAuth, setCheckingAuth] = useState<boolean>(true);
 
   // Dynamic Database State for Public Website
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<Project[]>(projectsData);
   const [projectsLoaded, setProjectsLoaded] = useState<boolean>(false);
-  const [projectsLoading, setProjectsLoading] = useState<boolean>(true);
-  const [profile, setProfile] = useState<ProfileData | null>(null);
+  const [projectsLoading, setProjectsLoading] = useState<boolean>(false);
+  const [profile, setProfile] = useState<ProfileData>(defaultProfileData);
 
-  // Active projects list: once loaded from server, use the live server projects strictly
-  const activeProjects = projectsLoaded ? projects : projectsData;
+  // Active projects list: always displays current active project collection
+  const activeProjects = projects && projects.length > 0 ? projects : projectsData;
 
   const [activeSection, setActiveSection] = useState<string>('home');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [contactModalOpen, setContactModalOpen] = useState(false);
   const [legalModalType, setLegalModalType] = useState<LegalDocType | null>(null);
 
-  // Fetch dynamic portfolio data from backend database with cache-busting
+  // Fetch dynamic portfolio data with universal backend and autonomous client engine support
   const fetchPublicData = useCallback(async () => {
     try {
       const [projRes, profRes] = await Promise.all([
-        fetch(`/api/projects?_t=${Date.now()}`, {
-          cache: 'no-store',
-          headers: {
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            Pragma: 'no-cache',
-          },
-        }).then((r) => (r.ok ? r.json() : null)),
-        fetch(`/api/profile?_t=${Date.now()}`, {
-          cache: 'no-store',
-          headers: {
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            Pragma: 'no-cache',
-          },
-        }).then((r) => (r.ok ? r.json() : null)),
+        api.get('/projects'),
+        api.get('/profile'),
       ]);
-      if (Array.isArray(projRes)) {
-        setProjects(projRes);
+      if (projRes?.data && Array.isArray(projRes.data) && projRes.data.length > 0) {
+        setProjects(projRes.data);
         setProjectsLoaded(true);
       }
-      if (profRes) {
-        setProfile(profRes);
+      if (profRes?.data && typeof profRes.data === 'object') {
+        setProfile(profRes.data);
       }
     } catch (err) {
-      console.error('Failed to load portfolio database data:', err);
+      console.warn('Portfolio data fetch warning (using initial store):', err);
     } finally {
       setProjectsLoading(false);
     }

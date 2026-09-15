@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Send, Copy, Check, Mail, Sparkles, Loader2, AlertCircle } from 'lucide-react';
+import { api } from './AdminPanel/api';
 
 interface ContactModalProps {
   isOpen: boolean;
@@ -39,26 +40,17 @@ export function ContactModal({ isOpen, onClose, darkMode, email = 'skmahammadnur
     setErrorMsg(null);
 
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: formData.name.trim(),
-          email: formData.email.trim(),
-          subject: formData.service,
-          message: formData.message.trim(),
-        }),
+      await api.post('/contact', {
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        subject: formData.service,
+        message: formData.message.trim(),
       });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || 'Failed to submit inquiry');
-      }
 
       setFormSubmitted(true);
     } catch (err: any) {
       console.error('Contact submission error:', err);
-      setErrorMsg(err.message || 'Something went wrong. Please try again.');
+      setErrorMsg(err.response?.data?.error || err.message || 'Something went wrong. Please try again.');
     } finally {
       setIsSubmitting(false);
     }

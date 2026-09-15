@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Loader2, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { api } from './api';
+import { clientDatabase } from '../../lib/clientDatabase';
 
 interface LoginScreenProps {
   onLoginSuccess: (email: string) => void;
@@ -9,7 +10,15 @@ interface LoginScreenProps {
 }
 
 export function LoginScreen({ onLoginSuccess, onBackToPortfolio }: LoginScreenProps) {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const creds = clientDatabase.getCredentials();
+        return creds?.email || 'skmahammadnurhosen1@gmail.com';
+      } catch (_) {}
+    }
+    return 'skmahammadnurhosen1@gmail.com';
+  });
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
